@@ -99,8 +99,9 @@ class Agent:
                 episode_reward += reward
 
                 # create tensors
-                reward = torch.tensor(reward, dtype=torch.long, device=device)
-                next_state = torch.tensor(next_state, dtype=torch.long, device=device)
+                reward = torch.tensor(reward, dtype=torch.float, device=device)
+                next_state = torch.tensor(next_state, dtype=torch.float, device=device)
+                terminated = torch.tensor(terminated, dtype=torch.float, device=device)
 
                 if is_training:
                     memory.append((state, action, next_state, reward, terminated))
@@ -150,7 +151,7 @@ class Agent:
         
         # calculate target Q-values - if terminations=true => zero    
         with torch.no_grad():
-            target_q = rewards + self.gamma * target_dqn(next_states).max(dim=1)[0]
+            target_q = rewards + self.gamma * target_dqn(next_states).max(dim=1)[0] * (1 - terminations)
 
         # calculate y_pred i.e Q-value - if terminations=true => zero
         current_q = policy_dqn(states).gather(dim=1, index=actions.unsqueeze(dim=1)).squeeze()
