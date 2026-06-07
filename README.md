@@ -35,6 +35,6 @@ The training process includes:
 ├── experience_replay.py
 ├── parameters.yaml
 ├── runs/
-│   ├── model.pt
-│   └── logs
+│   ├── flappybirdv0.pt
+│   └── flappybirdv0.log
 └── README.md
